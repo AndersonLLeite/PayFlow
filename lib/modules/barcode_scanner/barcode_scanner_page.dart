@@ -23,7 +23,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
   void initState() {
     controller.getAvailableCameras();
     controller.statusNotifier.addListener(() {
-      if(controller.status.hasBarcode){
+      if (controller.status.hasBarcode) {
         Navigator.pushReplacementNamed(context, "/insert_boleto");
       }
     });
@@ -50,7 +50,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
               builder: (_, status, __) {
                 if (status.showCamera) {
                   return Container(
-                    child: status.cameraController!.buildPreview(),
+                    child: controller.cameraController!.buildPreview(),
                   );
                 } else {
                   return Container();
@@ -85,7 +85,9 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
               ),
               bottomNavigationBar: SetLAbelButtons(
                 primaryLabel: "Inserir código do boleto",
-                onPrimaryPressed: () {},
+                onPrimaryPressed: () {
+                  Navigator.pushReplacementNamed(context, '/insert_boleto');
+                },
                 secondaryLabel: "Adicionar da galeria",
                 onSecondaryPressed: () {},
               ),
@@ -98,10 +100,12 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
                   return BottomSheetWidget(
                     primaryLabel: 'Escanear novamente',
                     onPrimaryPressed: () {
-                      controller.getAvailableCameras();
+                      controller.scanWithCamera();
                     },
                     secondaryLabel: 'Digitar código',
-                    onSecondaryPressed: () {},
+                    onSecondaryPressed: () {
+                      Navigator.pushReplacementNamed(context, '/insert_boleto');
+                    },
                     title:
                         'não foi possivel identificar o código de barras do seu boleto',
                     subTitle:
