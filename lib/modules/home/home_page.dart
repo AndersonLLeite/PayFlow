@@ -1,28 +1,22 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors
-
 import 'package:flutter/material.dart';
-
 import 'package:payflow/modules/extract/extract_page.dart';
 import 'package:payflow/modules/home/home_controller.dart';
 import 'package:payflow/modules/meus_boletos/meus_boletos_page.dart';
+import 'package:payflow/shared/models/user_model.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
-
-import '../../shared/models/user_model.dart';
-import '../../shared/themes/app_text_styles.dart';
+import 'package:payflow/shared/themes/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
   final UserModel user;
-  const HomePage({
-    Key? key,
-    required this.user,
-  }) : super(key: key);
+  const HomePage({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final homeController = HomeController();
+  final controller = HomeController();
+  final pages = [MeusBoletosPage(), ExtractPage()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,18 +29,16 @@ class _HomePageState extends State<HomePage> {
             child: ListTile(
               title: Text.rich(
                 TextSpan(
-                  text: "Olá",
-                  style: TextStyles.titleRegular,
-                  children: [
-                    TextSpan(
-                      text: " ${widget.user.name}",
-                      style: TextStyles.titleBoldBackground,
-                    ),
-                  ],
-                ),
+                    text: "Olá, ",
+                    style: TextStyles.titleRegular,
+                    children: [
+                      TextSpan(
+                          text: "${widget.user.name}",
+                          style: TextStyles.titleBoldBackground)
+                    ]),
               ),
               subtitle: Text(
-                "Mantenha as suas contas em dia",
+                "Mantenha suas contas em dia",
                 style: TextStyles.captionShape,
               ),
               trailing: Container(
@@ -55,66 +47,61 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(5),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.user.photoUrl!),
-                  ),
+                  // image:
+                  // DecorationImage(
+                  //     image: NetworkImage(widget.user.photoURL!)
+                  //     )
                 ),
               ),
             ),
           ),
         ),
       ),
-      body: [
-    MeusBoletosPage(
-      key: UniqueKey(),
-    ),
-    ExtractPage(
-      key: UniqueKey(),
-    ),
-    Container(
-      color: Colors.blue,
-    )
-  ][homeController.currentPage],
+      body: pages[controller.currentPage],
       bottomNavigationBar: Container(
         height: 90,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              onPressed: () {
-                homeController.setPage(0);
-                setState(() {});
-              },
-              icon: Icon(Icons.home),
-              color: homeController.currentPage == 0
-                  ? AppColors.primary
-                  : AppColors.body,
-            ),
+                onPressed: () {
+                  controller.setPage(0);
+                  setState(() {});
+                },
+                icon: Icon(
+                  Icons.home,
+                  color: controller.currentPage == 0
+                      ? AppColors.primary
+                      : AppColors.body,
+                )),
             GestureDetector(
               onTap: () async {
-                await Navigator.pushNamed(context, '/barcode_scanner');
+                await Navigator.pushNamed(context, "/barcode_scanner");
                 setState(() {});
               },
               child: Container(
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(5),
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Icon(
+                  Icons.add_box_outlined,
+                  color: AppColors.background,
                 ),
-                child: Icon(Icons.add_box_outlined),
               ),
             ),
             IconButton(
-              onPressed: () {
-                homeController.setPage(1);
-                setState(() {});
-              },
-              icon: Icon(Icons.description_outlined),
-              color: homeController.currentPage == 1
-                  ? AppColors.primary
-                  : AppColors.body,
-            )
+                onPressed: () {
+                  controller.setPage(1);
+                  setState(() {});
+                },
+                icon: Icon(
+                  Icons.description_outlined,
+                  color: controller.currentPage == 1
+                      ? AppColors.primary
+                      : AppColors.body,
+                ))
           ],
         ),
       ),

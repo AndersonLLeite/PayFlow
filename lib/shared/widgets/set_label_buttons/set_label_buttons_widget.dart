@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
+import 'package:payflow/shared/widgets/label_button/label_button.dart';
 
-import '../../themes/app_text_styles.dart';
-import '../divider/divider_vertical/divider_vertical_widget.dart';
-import '../label_button/label_button.dart';
+import '../divider/divider_vertical/divider_widget.dart';
 
-class SetLAbelButtons extends StatelessWidget {
-  final String primaryLabel;
-  final VoidCallback onPrimaryPressed;
-  final String secondaryLabel;
-  final VoidCallback onSecondaryPressed;
+class SetLabelButtons extends StatelessWidget {
+  final String labelPrimary;
+  final VoidCallback onTapPrimary;
+  final String labelSecondary;
+  final VoidCallback onTapSecondary;
   final bool enablePrimaryColor;
   final bool enableSecondaryColor;
-  const SetLAbelButtons({
+  const SetLabelButtons({
     Key? key,
-    required this.primaryLabel,
-    required this.onPrimaryPressed,
-    required this.secondaryLabel,
-    required this.onSecondaryPressed,
+    required this.labelPrimary,
+    required this.onTapPrimary,
+    required this.labelSecondary,
+    required this.onTapSecondary,
     this.enablePrimaryColor = false,
     this.enableSecondaryColor = false,
   }) : super(key: key);
@@ -25,41 +24,36 @@ class SetLAbelButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.background,
-      height: 57,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Divider(
-            thickness: 1,
-            height: 1,
-            color: AppColors.stroke,
-          ),
-          Container(
-            height: 56,
-            child: Row(
-              children: [
-                Expanded(
-                  child: LabelButton(
-                    label: primaryLabel,
-                    onPressed: onPrimaryPressed,
-                    style: enablePrimaryColor ? TextStyles.buttonPrimary : null,
-                  ),
-                ),
-                DividerVerticalWidget(),
-                Expanded(
-                  child: LabelButton(
-                    label: secondaryLabel,
-                    onPressed: onSecondaryPressed,
-                    style:
-                        enableSecondaryColor ? TextStyles.buttonPrimary : null,
-                  ),
-                ),
-              ],
+        color: AppColors.background,
+        height: 56,
+        child: Row(
+          children: [
+            if (enablePrimaryColor) ...[
+              LabelButton.primary(
+                label: labelPrimary,
+                onPressed: onTapPrimary,
+              ),
+            ] else ...[
+              LabelButton.heading(
+                label: labelPrimary,
+                onPressed: onTapPrimary,
+              ),
+            ],
+            DividerWidget(
+              height: 56,
             ),
-          ),
-        ],
-      ),
-    );
+            if (enableSecondaryColor) ...[
+              LabelButton.primary(
+                label: labelSecondary,
+                onPressed: onTapSecondary,
+              ),
+            ] else ...[
+              LabelButton.heading(
+                label: labelSecondary,
+                onPressed: onTapSecondary,
+              ),
+            ],
+          ],
+        ));
   }
 }

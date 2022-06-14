@@ -1,3 +1,6 @@
+
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +11,8 @@ void main() {
 }
 
 class AppFirebase extends StatefulWidget {
-  const AppFirebase({Key? key}) : super(key: key);
-
   @override
-  State<AppFirebase> createState() => _AppFirebaseState();
+  _AppFirebaseState createState() => _AppFirebaseState();
 }
 
 class _AppFirebaseState extends State<AppFirebase> {
@@ -20,24 +21,26 @@ class _AppFirebaseState extends State<AppFirebase> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Material(
-            child: Center(child: Text("Não foi possivel inicializar o firebase", textDirection:  TextDirection.ltr,)),
-
-          );
-        }
-
-        else if (snapshot.connectionState == ConnectionState.done) {
-          return AppWidget();
-        }
-        else return Material(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
-    );
+        future: _initialization,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Material(
+              child: Center(
+                child: Text(
+                  "Não foi possível inicializar o Firebase",
+                  textDirection: TextDirection.ltr,
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return AppWidget();
+          } else {
+            return Material(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        });
   }
 }
